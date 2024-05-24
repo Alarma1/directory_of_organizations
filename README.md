@@ -1,29 +1,24 @@
-# organization-directory
+[Демо](https://alarma1.github.io/directory_of_organizations-demo/)  
+[Ссылка на проект](https://github.com/Alarma1/directory_of_organizations)  
+# Справочник организаций
 
-This template should help get you started developing with Vue 3 in Vite.
+При помощи фреймворка Vue.js необходимо разработать одностраничное приложение - справочник организаций.
 
-## Recommended IDE Setup
+Справочник должен содержать следующие данные:
+- Название организации
+- ФИО директора
+- Номер телефона  
+  ![image](https://github.com/Alarma1/directory_of_organizations-demo/assets/102227463/18b899fd-fe5b-49e7-a19c-f4edc8100863)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Содержимое справочника нужно выводить в виде таблицы.
 
-## Customize configuration
+Справочник требуется отображать постранично с возможностью перехода между страницами.   
+Должна поддерживаться сортировка и фильтрация записей.   
+Сортировка выбирается по клику на заголовок столбца "Название" или "ФИО директора".   
+Фильтрация по частичному совпадению ФИО директора выполняется при вводе текста в поле "Найти по ФИО".  
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+Записи в справочник должны добавляться с помощью модального диалога.  
+![image](https://github.com/Alarma1/directory_of_organizations-demo/assets/102227463/6f528b77-c2e5-4e22-b34c-e3d6b3cd24b2)  
+Диалог нужно отображать при нажатии на кнопку "Добавить".  
+Кнопка "ОК" должна быть неактивна, пока незаполнены все поля в диалоге.  
+При нажатии на крестик в последней колонке строки она должна удаляться из справочника.
