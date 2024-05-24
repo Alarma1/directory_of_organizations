@@ -206,6 +206,9 @@
     }
     const cancel = () => {
         showModal.value = false;
+        name.value = ''
+        director.value = ''
+        phone.value = ''
     };
     const confirm = () => {
         showModal.value = false;
