@@ -213,6 +213,9 @@
     const confirm = () => {
         showModal.value = false;
         store.addItem({name: name.value, director: director.value, phone: phone.value})
+        name.value = ''
+        director.value = ''
+        phone.value = ''
         showPage()
     };
     onMounted(() => changeCurrentPage(1))
