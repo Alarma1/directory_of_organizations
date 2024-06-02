@@ -12,11 +12,17 @@
                 <table class="table">
                     <thead class="table__head">
                     <tr class="table__row">
-                        <th @click="sortElements('name')" class="table__cell table__cell--sortable">
-                            <IconSort titleText="Название" :orderDigit="ascendingOrder" :checkName="columnName"/>
+                        <th @click="sortElements('name')" class="table__cell">
+                            <div class="table__cell-sort">
+                                <span class="table__cell-text">Название</span>
+                                <IconSort v-if="columnName === 'name'" :orderDigit="ascendingOrder"/>
+                            </div>
                         </th>
-                        <th @click="sortElements('fio')" class="table__cell table__cell--sortable">
-                            <IconSort titleText="ФИО директоров" :orderDigit="ascendingOrder" :checkName="columnName"/>
+                        <th @click="sortElements('fio')" class="table__cell">
+                            <div class="table__cell-sort">
+                                <span class="table__cell-text">ФИО директоров</span>
+                                <IconSort v-if="columnName === 'fio'" :orderDigit="ascendingOrder"/>
+                            </div>
                         </th>
                         <th class="table__cell-text">Номер телефона</th>
                         <th></th>
@@ -250,6 +256,13 @@
 
                 &:hover {
                     background: $hover-bg-color;
+                }
+&-sort{
+    display: flex;
+    align-items: center;
+}
+                &-text {
+                    color: grey;
                 }
 
                 &-button {
