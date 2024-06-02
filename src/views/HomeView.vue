@@ -3,7 +3,9 @@
         <header class="header">
             <input @input="changeCurrentPageInput()" type="text" v-model="inputValue" placeholder="Найти по ФИО"
                    class="header__search-input"/>
-            <button @click="addItem" class="header__add-button">Добавить</button>
+            <div class="header__add-box">
+                <ButtonComp class="header__add-button" @btnClick="addItem" titleText="Добавить"/>
+            </div>
         </header>
         <main class="body">
             <section>
@@ -11,30 +13,10 @@
                     <thead class="table__head">
                     <tr class="table__row">
                         <th @click="sortElements('name')" class="table__cell table__cell--sortable">
-                            <div class="table__cell-content">
-                                <span class="table__cell-text">Название</span>
-                                <svg v-if="ascendingOrder !== 2 && columnName === 'name'"
-                                     xmlns="http://www.w3.org/2000/svg" fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke-width="1.5" stroke="grey" class="table__cell-icon"
-                                     :class="{'table__cell-icon-rotate':ascendingOrder === 1 && columnName === 'name'}">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M15.75 17.25 12 21m0 0-3.75-3.75M12 21V3"/>
-                                </svg>
-                            </div>
+                            <IconSort titleText="Название" :orderDigit="ascendingOrder" :checkName="columnName"/>
                         </th>
                         <th @click="sortElements('fio')" class="table__cell table__cell--sortable">
-                            <div class="table__cell-content">
-                                <span class="table__cell-text">ФИО директоров</span>
-                                <svg v-if="ascendingOrder !== 2 && columnName === 'fio'"
-                                     xmlns="http://www.w3.org/2000/svg" fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke-width="1.5" stroke="grey" class="table__cell-icon"
-                                     :class="{'table__cell-icon-rotate':ascendingOrder === 1 && columnName === 'fio'}">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M15.75 17.25 12 21m0 0-3.75-3.75M12 21V3"/>
-                                </svg>
-                            </div>
+                            <IconSort titleText="ФИО директоров" :orderDigit="ascendingOrder" :checkName="columnName"/>
                         </th>
                         <th class="table__cell-text">Номер телефона</th>
                         <th></th>
@@ -45,37 +27,23 @@
                         <td class="table__cell-name">{{ item.name }}</td>
                         <td class="table__cell-director">{{ item.director }}</td>
                         <td>{{ item.phone }}</td>
-                        <td class="table__cell table__cell-button">
-                            <button @click="deleteItem(item.id)" class="table__delete-button">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke-width="1.5"
-                                     stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
+
+                        <td class="table__cell-button">
+                            <div class="table__cell-box">
+                                <ButtonComp @btnClick="deleteItem(item.id)" hoverColor="deleteBtn"
+                                            class="table__delete-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5"
+                                         stroke="currentColor" class="table__cell-button-svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                                    </svg>
+                                </ButtonComp>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <div class="pagination">
-                    <button @click="changeCurrentPage(currentPage - 1)" :disabled="currentPage === 1"
-                            class="pagination__button">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/>
-                        </svg>
-                    </button>
-                    <div><p style="color: grey">Страница {{currentPage}}</p></div>
-                    <button @click="changeCurrentPage(currentPage + 1)" :disabled="currentPage === countPage"
-                            class="pagination__button">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
-                        </svg>
-                    </button>
-                </div>
+                <PaginationComp :countPage="countPage" @changePage="changeCurrentPage($event)"/>
             </section>
             <section>
                 <div class="modal" v-if="showModal">
@@ -112,6 +80,9 @@
 <script setup>
     import {ref, onMounted, computed} from "vue"
     import {useCounterStore} from "../stores/counter.js"
+    import ButtonComp from "../components/ButtonComp.vue"
+    import IconSort from "../components/IconSort.vue"
+    import PaginationComp from "../components/PaginationComp.vue"
 
     const store = useCounterStore()
     const filteredItems = ref(store.data)
@@ -148,6 +119,7 @@
             }
         }
         columnName.value = title
+        console.log(columnName.value)
         if (ascendingOrder.value === 0) {
             defaultData = [...filteredItems.value]
         }
@@ -194,6 +166,7 @@
         filteredItemsView.value = filteredItems.value.slice(start, end)
     }
     const changeCurrentPage = (id) => {
+        console.log(id)
         currentPage.value = id
         showPage()
     }
@@ -243,20 +216,13 @@
             border: 2px solid $grey-color;
         }
 
-        &__add-button {
-            padding: 10px 20px;
+        &__add-box {
+            width: 100px;
             border: 2px solid $black-color;
-            background-color: inherit;
-            color: $black-color;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-
-            &:hover {
-                background-color: $grey-color;
-            }
+            transition: transform 0.05s;
 
             &:active {
-                transform: scale(0.95);
+                transform: scale(0.86);
             }
         }
     }
@@ -272,19 +238,43 @@
             th,
             td {
                 border: 2px solid $grey-color;
-                padding: 10px;
+                padding: 0;
+
+                &:not(:nth-child(4)) {
+                    padding: 10px;
+                }
             }
 
             &__cell {
-                cursor: pointer;
-                transition: background-color 0.3s, transform 0.1s;
+                transition: background-color 0.3s, transform 0.05s;
 
                 &:hover {
                     background: $hover-bg-color;
                 }
 
                 &-button {
+                    width: 40px;
+                    height: 20px;
+
+                    &:hover {
+                        background-color: #d5e6a2;
+                    }
+
+                    &-svg {
+                        width: 30px;
+                        height: 20px;
+
+                        &:active {
+                            transform: scale(0.75);
+                        }
+                    }
+                }
+
+                &-box {
+                    margin: auto;
                     width: 20px;
+                    height: 20px;
+
                 }
 
                 &-name {
@@ -294,76 +284,35 @@
                 &-director {
                     width: 35%;
                 }
-
-                &-text {
-                    color: grey;
-                }
             }
 
             &__delete-button {
-                width: 100%;
-                height: 100%;
                 display: flex;
                 align-items: center;
-                padding: 0;
-                background-color: inherit;
-                border: none;
-                cursor: pointer;
+                justify-content: center;
 
-                &:hover {
-                    background: $hover-bg-color;
-                    border-radius: 10px;
-                    border: 1px solid;
+                transform: scale(0.86);
+
+                .delete-button__svg {
+                    width: 20px;
+                    height: 20px;
                 }
 
-                &:active {
-                    transform: scale(0.86);
-                    border-radius: 10px;
-                    border: 1px solid;
-                }
-            }
+                /*<!--&:hover {-->*/
+                /*<!--    background: $hover-bg-color;-->*/
+                /*<!--    border-radius: 10px;-->*/
+                /*<!--    border: 1px solid;-->*/
+                /*<!--}-->*/
 
-            &__cell-content {
-                display: flex;
-                align-items: center;
-            }
+                /*<!--&:active {-->*/
+                /*<!--    transform: scale(0.86);-->*/
+                /*<!--    border-radius: 10px;-->*/
+                /*<!--    border: 1px solid;-->*/
+                /*<!--}-->*/
 
-            &__cell-icon {
-                width: 1rem;
-                height: 1rem;
-                margin-left: 5px;
-                transition: transform 0.5s;
-            }
-
-            &__cell-icon-rotate {
-                transition: transform 0.5s;
-                transform: rotate(180deg);
             }
         }
 
-        .pagination {
-            display: flex;
-            justify-content: end;
-            gap: 5px;
-
-            &__button {
-                display: flex;
-                align-items: center;
-                width: 22px;
-                padding: 0;
-                background-color: inherit;
-                border: none;
-                cursor: pointer;
-
-                &--number {
-                    cursor: pointer;
-                }
-
-                &--active {
-                    border: 2px solid $black-color;
-                }
-            }
-        }
 
         .modal {
             display: flex;
