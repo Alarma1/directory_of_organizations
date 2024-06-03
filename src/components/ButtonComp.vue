@@ -1,6 +1,6 @@
 <template>
     <button @click="buttonClick" :disabled="disButton"
-            :class="{[hoverColor]:true}"> {{titleText}}
+            :class="{'ok-disabled':disButton}" class="default-style"> {{titleText}}
         <slot></slot>
     </button>
 </template>
@@ -9,7 +9,6 @@
     const props = defineProps({
         titleText: String,
         disButton: Boolean,
-        hoverColor: String,
     })
     const emit = defineEmits(['btnClick'])
     const buttonClick = () => {
@@ -18,8 +17,8 @@
 </script>
 
 <style scoped lang="scss">
+    @import "./src/assets/main.scss";
 
-    $grey-color: #ccc;
     button {
         width: 100%;
         height: 100%;
@@ -27,21 +26,28 @@
         padding: 0;
         cursor: pointer;
         background: none;
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
+    .default-style {
         transition: background-color 0.3s, transform 0.3s;
 
-    }
-
-    .addBtn {
         &:hover {
-            background-color: #ccc;
+            background-color: $grey-color;
         }
     }
 
-    .deleteBtn {
-        &:hover {
-            border-radius: 15px;
-            border: 1px solid black;
-        }
+    .ok-disabled {
+        cursor: not-allowed;
+        background-color: $grey-color;
+        border: 2px solid $grey-color;
+        color: gray;
 
+        &:active {
+            transform: none;
+        }
     }
 </style>

@@ -17,8 +17,8 @@
 
 <style scoped lang="scss">
     .box__icon-svg {
-        width: 1rem;
-        height: 1rem;
+        width: 100%;
+        height: 100%;
         margin-left: 5px;
         transition: transform 0.5s;
 
